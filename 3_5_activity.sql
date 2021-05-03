@@ -1,12 +1,12 @@
 SELECT *
-FROM activity as activity
+FROM activity as activity , hotel as hotel 
 WHERE NOT EXISTS(
 	SELECT * 
 	FROM participates
 	where participates.starttime = activity.starttime and 
-	participates.endtime = activity.endtime 
+	participates.endtime = activity.endtime and
 	participates.weekday = activity.weekday 
-);
+) and  activity."idHotel" = hotel."idHotel" and hotel."idHotel" = 5;
 
 
 --	participates.weekday = activity.weekday  to Activity.weekday giati to xehasame mallon 
