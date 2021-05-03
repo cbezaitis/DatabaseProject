@@ -1,4 +1,23 @@
 ---------------------------------------------------clients
+CREATE FUNCTION 2_1_insert_person(documentcl character varying(45), f_name character varying(45),
+							 l_name character varying(45), sexy character(1), dateof_birth date, 
+							 address_1 character varying(45), city_1 character varying(45), country_1 character varying(45)) 
+RETURNS table("id" integer, documentclie character varying(45)) AS
+$BODY$
+DECLARE idpers integer;
+BEGIN
+INSERT INTO person(fname, lname, sex, dateofbirth, address, city, country) 
+      VALUES ($2, $3, $4, $5, $6, $7, $8)
+	  RETURNING "idPerson" INTO idpers;
+INSERT INTO client("idClient", documentclient)
+      VALUES (idpers, $1);
+RETURN QUERY
+   SELECT *
+   FROM client 
+   WHERE "idClient" = idpers;
+END
+$BODY$ LANGUAGE plpgsql;
+
 CREATE FUNCTION 2_1_update_person(documentcl character varying(45), f_name character varying(45),
 							 l_name character varying(45), sexy character(1), dateof_birth date, 
 							 address_1 character varying(45), city_1 character varying(45), country_1 character varying(45)) 
@@ -19,25 +38,6 @@ RETURN QUERY
 END
 $BODY$ LANGUAGE plpgsql;
 
-CREATE FUNCTION 2_1_insert_person(documentcl character varying(45), f_name character varying(45),
-							 l_name character varying(45), sexy character(1), dateof_birth date, 
-							 address_1 character varying(45), city_1 character varying(45), country_1 character varying(45)) 
-RETURNS table("id" integer, documentclie character varying(45)) AS
-$BODY$
-DECLARE idpers integer;
-BEGIN
-INSERT INTO person(fname, lname, sex, dateofbirth, address, city, country) 
-      VALUES ($2, $3, $4, $5, $6, $7, $8)
-	  RETURNING "idPerson" INTO idpers;
-INSERT INTO client("idClient", documentclient)
-      VALUES (idpers, $1);
-RETURN QUERY
-   SELECT *
-   FROM client 
-   WHERE "idClient" = idpers;
-END
-$BODY$ LANGUAGE plpgsql;
-
 CREATE FUNCTION 2_1_delete_person(documentcl character varying(45), f_name character varying(45),
 							 l_name character varying(45), sexy character(1), dateof_birth date, 
 							 address_1 character varying(45), city_1 character varying(45), country_1 character varying(45)) 
@@ -55,9 +55,9 @@ RETURN QUERY
 END
 $BODY$ LANGUAGE plpgsql;
 
-SELECT * FROM insert_person('45768867656879', 'jim12', 'papanikolopoulos', 'M', '1996-07-13', 'lykourgou 2', 'gerakas', 'athens');
-SELECT * FROM update_person('45768867656879', 'jim1233', 'papanikolopoulos', 'M', '1996-07-13', 'lykourgou 2', 'gerakas', 'athens');
-SELECT * FROM delete_person('45768867656879', 'jim1233', 'papanikolopoulos', 'M', '1996-07-13', 'lykourgou 2', 'gerakas', 'athens'); 
+SELECT * FROM "2_1_insert_person"('145768867656879', 'jim12', 'papanikolopoulos', 'M', '1996-07-13', 'lykourgou 2', 'gerakas', 'athens');
+SELECT * FROM "2_1_update_person"('145768867656879', 'jim1233', 'papanikolopoulos', 'M', '1996-07-13', 'lykourgou 2', 'gerakas', 'athens');
+SELECT * FROM "2_1_delete_person"('145768867656879', 'jim1233', 'papanikolopoulos', 'M', '1996-07-13', 'lykourgou 2', 'gerakas', 'athens'); 
 --------------------------------------------------cards
 CREATE FUNCTION 2_1_insert_card(documentcl character varying(45), card_type_1 character varying(45),
 							 card_number_1 character varying(45), expiration_1 date, 
@@ -118,9 +118,9 @@ RETURN QUERY
 END
 $BODY$ LANGUAGE plpgsql;
 
-SELECT * FROM insert_card('45768867656879', 'VISA', '2053 4567 8739 9002', '2021-07-13', 'JIM PAPANIKOLOPOULOS' );
-SELECT * FROM update_card('45768867656879', 'VISA', '2053 4567 8739 9002', '2022-07-13', 'JIM PAPANIKOLOPOULOS' );
-SELECT * FROM delete_card('45768867656879', 'VISA', '2053 4567 8739 9002', '2022-07-13', 'JIM PAPANIKOLOPOULOS' );
+SELECT * FROM "2_1_insert_card"('145768867656879', 'VISA', '2053 4567 8739 9002', '2021-07-13', 'JIM PAPANIKOLOPOULOS' );
+SELECT * FROM "2_1_update_card"('145768867656879', 'VISA', '2053 4567 8739 9002', '2022-07-13', 'JIM PAPANIKOLOPOULOS' );
+SELECT * FROM "2_1_delete_card"('145768867656879', 'VISA', '2053 4567 8739 9002', '2022-07-13', 'JIM PAPANIKOLOPOULOS' );
 
 
 ---------------------------------------------------kapoia vasika

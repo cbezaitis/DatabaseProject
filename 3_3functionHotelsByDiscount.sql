@@ -12,6 +12,7 @@
 	
 	
 CREATE FUNCTION "3_3_hotels_by_bigger_discount"() 
+
 RETURNS table("HOTEL"character varying(45), "ROOM_TYPE" character varying(45))
 							 AS
 $BODY$
