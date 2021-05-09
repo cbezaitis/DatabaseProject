@@ -1,0 +1,75 @@
+SELECT *
+FROM room as r, roombooking as rb, hotel as h, hotelbooking as hb
+where r."idHotel" = h."idHotel" and rb."roomID"= r."idRoom" and rb."hotelbookingID" = hb."idhotelbooking"
+ORDER by h.city;
+
+-- hotel booking ID -> 2737 gia idhotel 73 manager 2496
+
+-- hotel booking ID -> 5167 gia idhotel 73 reception 2721
+
+-- hotel booking ID -> 5167 gia idhotel 73 reception 2721
+
+
+SELECT * 
+FROM employee as emp
+where emp."hotelID" = 73;
+
+
+insert into "Manages"
+Values (2496,2737);
+
+insert into "Manages"
+Values (2721,5167);
+
+SELECT * FROM "Manages";
+
+SELECT * from hotelbooking 
+where idhotelbooking = 5167;
+
+
+SELECT NOW()::date;
+
+DELETE  FROM hotelbooking  where idhotelbooking = 5167;
+
+15 May 2021
+
+SELECT "role" from "Manages" as man INNER JOIN employee as emp 
+ON man."employee_idEmployee" = emp."idEmployee"
+where man.hotelbooking_idhotelbooking = 2737 ;  
+
+CREATE TRIGGER "5_2_trigger_booking_update"
+BEFORE UPDATE OR DELETE ON hotelbooking
+FOR EACH ROW EXECUTE PROCEDURE "5_2_process_booking_update"();
+
+CREATE OR REPLACE FUNCTION "5_2_process_booking_update"() RETURNS TRIGGER AS $$
+
+DECLARE role_0 character varying(45);
+BEGIN
+-- Create a row in emp_audit to reflect the operation performed on emp,
+-- make use of the special variable TG_OP to work out the operation.
+
+SELECT "role" INTO role_0 
+from "Manages" as man INNER JOIN employee as emp ON man."employee_idEmployee" = emp."idEmployee"
+where man.hotelbooking_idhotelbooking = OLD."idhotelbooking";
+
+IF (TG_OP = 'DELETE') THEN
+	IF (role_0 = 'manager') THEN 
+		IF (OLD.cancellationdate >= (NOW()::date)  ) THEN
+			--DELETE FROM hotelbooking WHERE OLD."idhotelbooking" = hotelbooking."idhotelbooking";
+		    insert into "Manages"
+			Values (2720,5168); 
+		END IF;
+	ELSIF (role_0 = 'reception') THEN
+		IF (OLD.cancellationdate >= (NOW()::date)  ) THEN
+			--DELETE FROM hotelbooking WHERE OLD."idhotelbooking" = hotelbooking."idhotelbooking";
+			insert into "Manages"
+			Values (2720,5166); 
+		END IF;
+	END if; 
+ELSIF (TG_OP = 'UPDATE') THEN
+
+END IF;
+RETURN NULL; -- result is ignored since this is an AFTER trigger
+END;
+$$ LANGUAGE plpgsql;
+
