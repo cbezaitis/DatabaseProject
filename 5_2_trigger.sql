@@ -18,12 +18,24 @@ where "idhotelbooking" = 2737 ;
 
 
 
-UPDATE hotelbooking SET cancellationdate = '2021-05-10'
+UPDATE hotelbooking SET cancellationdate = '2021-05-15'
 where "idhotelbooking" = 2737 ;
 
 SELECT * from hotelbooking 
 where idhotelbooking = 2737;
 
+SELECT * from hotelbooking 
+where idhotelbooking = 105 or idhotelbooking = 2737;
+
+
+UPDATE hotelbooking SET cancellationdate = '2021-05-15'
+where "idhotelbooking" = 105 ;
+
+INSERT INTO hotelbooking 
+VALUES (2737,'2021-05-10','2021-05-10',30,662,'true', 'card' ,'confirmed')
+
+DELETE  FROM hotelbooking  where idhotelbooking = 2737;
+-- WE USED CASCADE on both Transaction and Manages! 
 
 SELECT * 
 FROM employee as emp
@@ -42,6 +54,7 @@ SELECT NOW()::date;
 
 DELETE  FROM hotelbooking  where idhotelbooking = 5167;
 
+SELECT * FROM hotelbooking where idhotelbooking = 5167 ;
 15 May 2021
 
 SELECT "role" from "Manages" as man INNER JOIN employee as emp 
@@ -61,6 +74,18 @@ FOR EACH ROW EXECUTE PROCEDURE "5_2_process_booking_update"();
 
 
 
+
+SELECT insert into "Manages"
+Values (2721,5167)
+;
+
+
+SELECT "role" 
+from "Manages" as man INNER JOIN employee as emp ON man."employee_idEmployee" = emp."idEmployee"
+where man.hotelbooking_idhotelbooking = 105;
+
+
+
 CREATE OR REPLACE FUNCTION "5_2_process_booking_update"() RETURNS TRIGGER AS $$
 
 DECLARE role_0 character varying(45);
@@ -68,18 +93,18 @@ BEGIN
 
 SELECT "role" INTO role_0 
 from "Manages" as man INNER JOIN employee as emp ON man."employee_idEmployee" = emp."idEmployee"
-where man.hotelbooking_idhotelbooking = OLD."idhotelbooking";
+where man.hotelbooking_idhotelbooking = new."idhotelbooking";
 
 IF (TG_OP = 'DELETE') THEN
 	IF (role_0 = 'manager') THEN 
 		IF (OLD.cancellationdate >= (NOW()::date)  ) THEN
 		-- The cancellation date has not passed, so manager can delete
-			RETURN new; 
+			RETURN old; 
 		END IF;
 	ELSIF (role_0 = 'reception') THEN
 		IF (OLD.cancellationdate >= (NOW()::date)  ) THEN
 		-- The cancellation date has not passed,  so manager can delete
-			RETURN new;
+			RETURN old;
 		END IF;
 	END if; 
 ELSIF (TG_OP = 'UPDATE') THEN
@@ -87,11 +112,11 @@ ELSIF (TG_OP = 'UPDATE') THEN
 		IF (OLD.cancellationdate >= (NOW()::date)  ) THEN
 		-- The cancellation date has not passed, so everything can change
 			RETURN NEW;
-		ELSIF (NEW.cancellationdate != OLD.cancellationdate) and (OLD.reservationdate = NEW.reservationdate) and (OLD."bookedbyclientID" = NEW."bookedbyclientID") and (OLD.totalamount>= NEW.totalamount) THEN
+		ELSIF (NEW.cancellationdate != OLD.cancellationdate) and (OLD.reservationdate = NEW.reservationdate) and (OLD."bookedbyclientID" = NEW."bookedbyclientID")  THEN
 		-- The manager can  update cancellation date , payed, paymethod, status	and total amount  but he 
 		-- can NOT update reservationdate and bookedbyclient id
 			RETURN NEW;
-		ELSIF (OLD.reservationdate = NEW.reservationdate) and (OLD."bookedbyclientID" = NEW."bookedbyclientID") and (OLD.totalamount>= NEW.totalamount)  THEN 
+		ELSIF (OLD.reservationdate = NEW.reservationdate) and (OLD."bookedbyclientID" = NEW."bookedbyclientID") and ((NEW.totalamount>= old.totalamount) or old.totalamount = null) THEN 
 			RETURN NEW;
 		ELSE  
 			RETURN NULL;
