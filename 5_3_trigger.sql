@@ -18,11 +18,11 @@ where "idhotelbooking" = 2737 ;
 
 
 
-UPDATE hotelbooking SET cancellationdate = '2021-05-10'
+UPDATE hotelbooking SET cancellationdate = '2021-05-16'
 where "idhotelbooking" = 105 ;
 
 SELECT * from hotelbooking 
-where idhotelbooking = 2737;
+where idhotelbooking = 105;
 
 
 SELECT * 
@@ -57,7 +57,7 @@ where "hotelbookingID" = 105 and "roomID" = 40;
 
 SELECT * 
 FROM roombooking as  rb 
-where "roomID" = 40;
+where "roomID" = 40 and "hotelbookingID" = 105;
 
 INSERT INTO roombooking ("hotelbookingID", "roomID")
 VALUES (105, 40 );
@@ -73,9 +73,9 @@ VALUES (105, 40, 6909, 2021-05-16, 2021-05-20);
 INSERT INTO roombooking 
 VALUES (105, 40, 6009, '2021-07-16', '2021-07-20', 50);
 
-UPDATE roombooking SET checkout = '2021-07-20'
- where "hotelbookingID" = 105 and "roomID" = 40;
- ;
+UPDATE roombooking SET checkin = '2021-07-15'
+where "hotelbookingID" = 105 and "roomID" = 40;
+
 
 
 UPDATE hotelbooking SET totalamount =   50 * (DATE_PART('day', '2024-07-20'::timestamp - '2024-07-16'::timestamp))
@@ -185,7 +185,7 @@ ELSIF (TG_OP = 'UPDATE') THEN
         WHEN EXISTS(
              SELECT * 
              FROM  roombooking as roombooking_0 
-             WHERE  roombooking_0."roomID" = new."roomID" and ( (new.checkout <= roombooking_0.checkout and new.checkout  >= roombooking_0.checkin )
+             WHERE  roombooking_0."roomID" = new."roomID" and roombooking_0."hotelbookingID"!=old."hotelbookingID" and ( (new.checkout <= roombooking_0.checkout and new.checkout  >= roombooking_0.checkin )
 				or (old.checkout >= roombooking_0.checkin and old.checkout < roombooking_0.checkout)  or 
 				(new.checkout  >= roombooking_0.checkout  and  old.checkout < roombooking_0.checkout)  or 
 				(new.checkout  >= roombooking_0.checkin  and  old.checkout <= roombooking_0.checkin)  )
@@ -221,7 +221,7 @@ ELSIF (TG_OP = 'UPDATE') THEN
 			total_amount = 0;
 		END IF;
 		--As the hotelbooking trigger is already enabled, 
-		UPDATE hotelbooking SET totalamount =  total_amount + NEW.rate * (DATE_PART('day', new.checkout::timestamp - old.checkout ::timestamp))
+		UPDATE hotelbooking SET totalamount =  total_amount + NEW.rate * (DATE_PART('day', new.checkout::timestamp - old.checkout ::timestamp + old.checkin::timestamp - new.checkin::timestamp))
 		where hotelbooking."idhotelbooking" = NEW."hotelbookingID";
 		GET DIAGNOSTICS hotel_book = ROW_COUNT;
 		-- checking if the update on room booking can be made by triggering hotelbooking
@@ -249,7 +249,7 @@ ELSIF (TG_OP = 'INSERT') THEN
         WHEN EXISTS(
              SELECT * 
              FROM  roombooking as roombooking_0 
-             WHERE  roombooking_0."roomID" = new."roomID" and ( (new.checkout <= roombooking_0.checkout and new.checkout  >= roombooking_0.checkin )
+             WHERE  roombooking_0."roomID" = new."roomID" and  roombooking_0."hotelbookingID"!=old."hotelbookingID" and ( (new.checkout <= roombooking_0.checkout and new.checkout  >= roombooking_0.checkin )
 				or (new.checkin >= roombooking_0.checkin and new.checkin  <= roombooking_0.checkout)  or 
 				(new.checkout  >= roombooking_0.checkout  and  new.checkin  <= roombooking_0.checkout)  or 
 				(new.checkout  >= roombooking_0.checkin  and  new.checkin  <= roombooking_0.checkin)  )
