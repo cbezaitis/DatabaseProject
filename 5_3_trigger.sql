@@ -207,7 +207,7 @@ ELSIF (TG_OP = 'UPDATE') THEN
 		
 		SELECT roomrate.rate, roomrate.discount INTO rate_0, discount_0
 		FROM roomrate, roombooking, room
-		where roombooking."hotelbookingID" = NEW."hotelbookingID" and room."idRoom" = roombooking."hotelbookingID" 
+		where roombooking."hotelbookingID" = NEW."hotelbookingID" and room."idRoom" = NEW."roomID"
 		and room."idHotel" = roomrate."idHotel" and room."roomtype"= roomrate."roomtype"
 		GROUP BY roomrate.rate, roomrate.discount;
 		-- Calculating the new rate by using distinct rate and discount
@@ -237,7 +237,7 @@ ELSIF (TG_OP = 'INSERT') THEN
 	-- Calculating the new rate for the newly inserted room booking
 	SELECT roomrate.rate, roomrate.discount INTO rate_0, discount_0
 	FROM roomrate, roombooking, room
-	where roombooking."hotelbookingID" = NEW."hotelbookingID" and room."idRoom" = roombooking."hotelbookingID" 
+	where roombooking."hotelbookingID" = NEW."hotelbookingID" and room."idRoom" = NEW."roomID"
 	and room."idHotel" = roomrate."idHotel" and room."roomtype"= roomrate."roomtype"
 	GROUP BY roomrate.rate, roomrate.discount;
 	
