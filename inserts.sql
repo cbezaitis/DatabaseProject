@@ -104,3 +104,8 @@ INSERT INTO "Transaction" VALUES (31, 886, '2021-03-05', 100, 'reservation');
 -------manages
 insert into "Manages" Values (2496,2737);
 insert into "Manages" Values (2721,5167);
+INSERT INTO "Manages" VALUES (7120, 199);
+INSERT INTO "Manages" VALUES (1829, 299);
+INSERT INTO "Manages" VALUES (2136, 467);
+INSERT INTO "Manages" VALUES (1045, 566);
+INSERT INTO "Manages" VALUES (3163, 758);
