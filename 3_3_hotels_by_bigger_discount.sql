@@ -1,16 +1,3 @@
-	SELECT * 
-	FROM hotel as hotel_0, roomrate as roomrate_0 
-	where hotel_0."idHotel" = roomrate_0."idHotel" and roomrate_0.discount = 50
-	ORDER BY roomrate_0.roomtype;
-	
-	
-	SELECT MAX(discount)
-	FROM roomrate as roomrate_0 ;
-	
-	SELECT * 
-	from roomrate;
-	
-	
 CREATE FUNCTION "3_3_hotels_by_bigger_discount"() 
 
 RETURNS table(id_hotel integer, "HOTEL"character varying(45), "ROOM_TYPE" character varying(45), "Discount" real)
