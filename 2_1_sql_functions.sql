@@ -55,9 +55,9 @@ RETURN QUERY
 END
 $BODY$ LANGUAGE plpgsql;
 
-SELECT * FROM "2_1_insert_person"('145768867656879', 'jim12', 'papanikolopoulos', 'M', '1996-07-13', 'lykourgou 2', 'gerakas', 'athens');
-SELECT * FROM "2_1_update_person"('145768867656879', 'jim1233', 'papanikolopoulos', 'M', '1996-07-13', 'lykourgou 2', 'gerakas', 'athens');
-SELECT * FROM "2_1_delete_person"('145768867656879', 'jim1233', 'papanikolopoulos', 'M', '1996-07-13', 'lykourgou 2', 'gerakas', 'athens'); 
+SELECT * FROM "2_1_insert_person"('145768867656879', 'mirada', 'papadolopoulou', 'F', '1967-07-13', 'Ermou 2', 'Syntagma', 'athens');
+SELECT * FROM "2_1_update_person"('145768867656879', 'miranda', 'papadolopoulou', 'F', '1967-07-13', 'Ermou 2', 'Syntagma', 'athens');
+SELECT * FROM "2_1_delete_person"('145768867656879', 'miranda', 'papadolopoulou', 'F', '1967-07-13', 'Ermou 2', 'Syntagma', 'athens'); 
 --------------------------------------------------cards
 CREATE FUNCTION "2_1_insert_card"(documentcl character varying(45), card_type_1 character varying(45),
 							 card_number_1 character varying(45), expiration_1 date, 
@@ -118,6 +118,6 @@ RETURN QUERY
 END
 $BODY$ LANGUAGE plpgsql;
 
-SELECT * FROM "2_1_insert_card"('145768867656879', 'VISA', '2053 4567 8739 9002', '2021-07-13', 'JIM PAPANIKOLOPOULOS' );
-SELECT * FROM "2_1_update_card"('145768867656879', 'VISA', '2053 4567 8739 9002', '2022-07-13', 'JIM PAPANIKOLOPOULOS' );
-SELECT * FROM "2_1_delete_card"('145768867656879', 'VISA', '2053 4567 8739 9002', '2022-07-13', 'JIM PAPANIKOLOPOULOS' );
+SELECT * FROM "2_1_insert_card"('145768867656879', 'VISA', '2053 4567 8739 9002', '2021-07-13', 'MIRADA PAPADOPOULOU' );
+SELECT * FROM "2_1_update_card"('145768867656879', 'VISA', '2053 4567 8739 9002', '2022-07-13', 'MIRANDA PAPADOPOULOU' );
+SELECT * FROM "2_1_delete_card"('145768867656879', 'VISA', '2053 4567 8739 9002', '2022-07-13', 'MIRANDA PAPADOPOULOU' );

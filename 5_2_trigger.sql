@@ -29,7 +29,7 @@ where idhotelbooking = 105 or idhotelbooking = 2737;
 
 
 UPDATE hotelbooking SET cancellationdate = '2021-05-15'
-where "idhotelbooking" = 105 ;
+where "idhotelbooking" = 105;
 
 INSERT INTO hotelbooking 
 VALUES (2737,'2021-05-10','2021-05-10',30,662,'true', 'card' ,'confirmed')

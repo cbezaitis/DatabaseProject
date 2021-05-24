@@ -14,7 +14,7 @@ RETURN QUERY
 END
 $BODY$ LANGUAGE plpgsql;
 
-
+SELECT * FROM "3_5_search_for_activities"(105);
 -----query 
 
 SELECT starttime, endtime, "Weekday", activitytype FROM activity as activity  

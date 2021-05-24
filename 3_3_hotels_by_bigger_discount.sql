@@ -15,4 +15,4 @@ RETURN QUERY
 END
 $BODY$ LANGUAGE plpgsql;
 
-SELECT * FROM "3_3_hotels_by_bigger_discount"() ;
+SELECT * FROM "3_3_hotels_by_bigger_discount"();

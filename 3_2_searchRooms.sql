@@ -15,4 +15,4 @@ RETURN QUERY
 END
 $BODY$ LANGUAGE plpgsql;
 
-SELECT * FROM "3_2_searchRooms"('3', '%');
+SELECT * FROM "3_2_searchRooms"('4', 'Be');

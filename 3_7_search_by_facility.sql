@@ -20,7 +20,7 @@ RETURN QUERY
 END;
 $BODY$ LANGUAGE plpgsql;
 
-SELECT * FROM "3_7_search_by_facility"('Kids Services', 'Kid Amenities' ) 
+SELECT * FROM "3_7_search_by_facility"('Kids Services', 'Kid Amenities' ); 
 
 ------function helper finds parent facility
 CREATE OR REPLACE FUNCTION helper_find_parent_facility(facility character varying(45)) 
